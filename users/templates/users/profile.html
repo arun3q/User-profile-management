@@ -5,12 +5,15 @@
       <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
         
-        country_flag
         <div class="media-body">
           <p class="text-secondary">{{ user.email }}</p>
           {% if user.location  %}
-              <p class="text-secondary">{{ user.location }}</p>
-              <img class="rounded-circle account-img" src="{{ country_flag }}">
+              <div class="media-body">
+                <p class="text-secondary">{{ user.location.upper }}
+                  <img style="width:10%; height: 50px;"  class="rounded-circle account-img" src="{{ country_flag }}">
+                </p>
+                
+              </div>
           {% else %}
               <p class="text-secondary">Australia</p>
               

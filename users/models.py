@@ -55,7 +55,7 @@ class Profile(models.Model):
 	image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
 	def __str__(self):
-		return "{} Profile".format(self.user.username)
+		return "{} Profile".format(self.user.email)
 
 	def save(self):
 		super().save()

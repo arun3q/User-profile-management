@@ -25,7 +25,7 @@ SECRET_KEY = '(uu6$bd2*j7d@6nw1i$5!d6-7#)4hno(3o4!rqi!#2-uu$qexp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['authproject-arun3q.c9users.io']
+ALLOWED_HOSTS = ['authproject-arun3q.c9users.io','0.0.0.0', 'localhost']
 
 
 # Application definition
@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['authproject-arun3q.c9users.io']
 INSTALLED_APPS = [
     'users',
     'crispy_forms',
-    'django_countries',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,8 +130,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'users/static'),
+)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

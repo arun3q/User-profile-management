@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.gis.geoip2 import GeoIP2
-from django_countries.fields import CountryField
+
 
 def register(request):
 	if request.method == "POST":
@@ -26,6 +26,8 @@ def getLocation(request):
 	g = GeoIP2()
 	
 	ip = request.META.get('HTTP_X_FORWARDED_FOR', None)
+	if not ip:
+		ip = request.META.get('REMOTE_ADDR', None)
 	country = ip
 	if ip:
 		try:
@@ -52,7 +54,11 @@ def profile(request):
 	else:
 		u_form = UserUpdateForm(instance=request.user)
 		p_form = ProfileUpdateForm(instance=request.user.profile)
-	user_location = request.user.location.lower()
+		
+	if request.user.location:
+		user_location = request.user.location.lower()
+	else:
+		user_location = "au"
 	country_flag = "http://assets.ipstack.com/flags/"+user_location+".svg"
 	
 	context = {

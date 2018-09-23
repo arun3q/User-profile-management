@@ -50,6 +50,7 @@ pip install -r requirements.txt
 
 ```
 first cd into authProject:
+
 cd authProject
 
 make changes in settings.py file to use MySQL DB.

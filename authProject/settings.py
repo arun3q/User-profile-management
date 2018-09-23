@@ -25,12 +25,14 @@ SECRET_KEY = '(uu6$bd2*j7d@6nw1i$5!d6-7#)4hno(3o4!rqi!#2-uu$qexp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['authproject-arun3q.c9users.io']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,6 +121,15 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Adding custom user model to allow login with email
 AUTH_USER_MODEL = 'users.User'
+
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGIN_URL = 'login'

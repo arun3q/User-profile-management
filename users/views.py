@@ -2,22 +2,40 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-
+from django.contrib.gis.geoip2 import GeoIP2
 
 def register(request):
 	if request.method == "POST":
 		form = UserRegisterForm(request.POST)	
 		if form.is_valid():
-			form.save()
+			location = getLocation(request)
+			
+			user = form.save(commit=False)
+			user.location = location
 			email = form.cleaned_data.get('email')
+			user.save()
 			messages.success(request, "Account created for {}! You can now login.".format(email))
 			return redirect('login')
 	else:
 		form = UserRegisterForm()
 	return render(request, 'users/register.html', {'form': form})
 
+
+def getLocation(request):
+	g = GeoIP2()
+	ip = request.META.get('REMOTE_ADDR', None)
+	country = ip
+	if ip:
+		try:
+			country = g.country(ip)
+		except:
+			country = ip
+	return country
+	
+
 @login_required
 def profile(request):
+	
 	if request.method == "POST":
 		u_form = UserUpdateForm(request.POST, instance=request.user)
 		p_form = ProfileUpdateForm(request.POST,
@@ -36,6 +54,6 @@ def profile(request):
 
 	context = {
 		'u_form': u_form,
-		'p_form': p_form
+		'p_form': p_form,
 	}
 	return render(request, 'users/profile.html', context)

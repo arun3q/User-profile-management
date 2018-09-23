@@ -1,8 +1,9 @@
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
-
+from django.conf import settings
 from django.db import models
 from PIL import Image
+
  
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -27,6 +28,7 @@ class MyUserManager(BaseUserManager):
         
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True)
+    location = models.TextField(max_length=50,null=True,blank=True)
     is_staff = models.BooleanField(
         'staff status',
         default=False,
@@ -51,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
 	def __str__(self):
@@ -60,8 +62,9 @@ class Profile(models.Model):
 	def save(self):
 		super().save()
 		img = Image.open(self.image.path)
-
 		if img.height>300 or img.width>300:
 			output_size = (300, 300)
 			img.thumbnail(output_size)
-			img.save(self.image.path)        
+			img.save(self.image.path)   
+			
+			

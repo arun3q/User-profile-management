@@ -133,3 +133,7 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = 'profile'
 LOGIN_URL = 'login'
+
+os.path.join(BASE_DIR, 'geoip')
+
+GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')

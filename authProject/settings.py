@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['authproject-arun3q.c9users.io']
 INSTALLED_APPS = [
     'users',
     'crispy_forms',
+    'django_countries',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

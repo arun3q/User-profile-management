@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.gis.geoip2 import GeoIP2
+from django_countries.fields import CountryField
 
 def register(request):
 	if request.method == "POST":
@@ -18,24 +19,24 @@ def register(request):
 			return redirect('login')
 	else:
 		form = UserRegisterForm()
+	
 	return render(request, 'users/register.html', {'form': form})
-
 
 def getLocation(request):
 	g = GeoIP2()
-	ip = request.META.get('REMOTE_ADDR', None)
+	
+	ip = request.META.get('HTTP_X_FORWARDED_FOR', None)
 	country = ip
 	if ip:
 		try:
-			country = g.country(ip)
+			country = g.country(ip)['country_code'].lower()
 		except:
-			country = ip
+			country = 'au'
 	return country
-	
+	#http://api.hostip.info/flag.php?ip=1.186.178.45
 
 @login_required
 def profile(request):
-	
 	if request.method == "POST":
 		u_form = UserUpdateForm(request.POST, instance=request.user)
 		p_form = ProfileUpdateForm(request.POST,
@@ -51,9 +52,12 @@ def profile(request):
 	else:
 		u_form = UserUpdateForm(instance=request.user)
 		p_form = ProfileUpdateForm(instance=request.user.profile)
-
+	user_location = request.user.location.lower()
+	country_flag = "http://assets.ipstack.com/flags/"+user_location+".svg"
+	
 	context = {
 		'u_form': u_form,
 		'p_form': p_form,
+		'country_flag':country_flag
 	}
 	return render(request, 'users/profile.html', context)
